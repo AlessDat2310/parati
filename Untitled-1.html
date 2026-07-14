@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Para Ana Nicole </title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF3EA;
+    --blush:#F3C9CE;
+    --wine:#7A2E3B;
+    --wine-deep:#5A1F2A;
+    --gold:#C79A5B;
+    --ink:#3B2226;
+    --paper:#FFFDF9;
+  }
+
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:var(--wine-deep);
+    font-family:'Poppins', sans-serif;
+    color:var(--ink);
+    overflow:hidden;
+  }
+
+  .book{
+    height:100dvh;
+    width:100vw;
+    display:flex;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .book::-webkit-scrollbar{display:none;}
+
+  .page{
+    flex:0 0 100vw;
+    height:100dvh;
+    scroll-snap-align:start;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:28px 22px;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 18% 12%, rgba(199,154,91,.18), transparent 40%),
+      radial-gradient(circle at 85% 90%, rgba(122,46,59,.15), transparent 45%),
+      var(--cream);
+  }
+
+  .page::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:radial-gradient(rgba(122,46,59,0.045) 1px, transparent 1px);
+    background-size:14px 14px;
+    pointer-events:none;
+  }
+
+  .dots{
+    position:fixed; bottom:16px; left:0; right:0;
+    display:flex; justify-content:center; gap:9px;
+    z-index:20; pointer-events:none;
+  }
+  .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:rgba(255,255,255,.35);
+    transition:all .3s ease;
+  }
+  .dot.active{ background:var(--gold); width:20px; border-radius:5px;}
+
+  .doodle{ position:absolute; opacity:.5; }
+
+  h1,h2,h3{ font-family:'Cormorant Garamond', serif; font-weight:600; margin:0;}
+  .script{ font-family:'Caveat', cursive; }
+
+  .eyebrow{
+    font-family:'Caveat', cursive;
+    color:var(--wine);
+    font-size:22px;
+    letter-spacing:1px;
+    margin-bottom:2px;
+  }
+  .cover-title{
+    font-size:44px;
+    color:var(--wine-deep);
+    line-height:1.05;
+    text-align:center;
+    margin:6px 0 10px;
+  }
+  .cover-sub{
+    font-size:15px; color:#8a6b6f; text-align:center; max-width:260px;
+    line-height:1.5; margin-bottom:26px;
+  }
+  .swipe-hint{
+    position:absolute; bottom:64px; left:0; right:0;
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    color:var(--wine); font-family:'Caveat', cursive; font-size:19px;
+    animation:nudge 1.8s ease-in-out infinite;
+  }
+  @keyframes nudge{
+    0%,100%{ transform:translateX(0); opacity:.65;}
+    50%{ transform:translateX(10px); opacity:1;}
+  }
+
+  .polaroid{
+    background:var(--paper);
+    padding:14px 14px 46px;
+    box-shadow:0 18px 34px rgba(58,20,25,.28), 0 2px 6px rgba(58,20,25,.12);
+    transform:rotate(var(--tilt,-3deg));
+    width:min(74vw, 290px);
+    position:relative;
+  }
+  .polaroid img{
+    display:block; width:100%; aspect-ratio:4/5; object-fit:cover;
+    background:linear-gradient(135deg,#e9d3c7,#d9b9c4);
+  }
+  .polaroid .cap{
+    position:absolute; bottom:12px; left:0; right:0; text-align:center;
+    font-family:'Caveat', cursive; font-size:20px; color:var(--wine);
+  }
+  .tape{
+    position:absolute; width:64px; height:24px;
+    background:rgba(199,154,91,.55);
+    border:1px solid rgba(199,154,91,.7);
+    box-shadow:0 2px 4px rgba(0,0,0,.08);
+  }
+
+  .photo-title{ font-size:28px; color:var(--wine-deep); text-align:center; margin-bottom:20px;}
+  .frame-wrap{ position:relative; }
+
+  .note{
+    background:var(--paper);
+    border-radius:2px;
+    padding:34px 26px;
+    box-shadow:0 14px 30px rgba(58,20,25,.22);
+    max-width:300px;
+    position:relative;
+  }
+  .note::before{
+    content:"";
+    position:absolute; top:0; left:26px; right:26px; height:3px;
+    background:repeating-linear-gradient(90deg, var(--gold) 0 8px, transparent 8px 16px);
+  }
+  .note p{
+    font-family:'Cormorant Garamond', serif;
+    font-size:19px; line-height:1.7; color:var(--ink); margin:0 0 14px;
+    font-style:italic;
+    white-space:pre-line;
+  }
+  .note .sign{
+    font-family:'Caveat', cursive; font-size:22px; color:var(--wine); text-align:right;
+    line-height:1.4;
+  }
+
+  .ask-title{
+    font-size:26px; color:var(--wine); text-align:center; margin-bottom:2px;
+  }
+  .ask-big{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:30px;
+    text-align:center;
+    color:var(--wine-deep);
+    max-width:280px;
+    line-height:1.25;
+    margin:8px 0 30px;
+  }
+  .btn-zone{
+    position:relative;
+    width:92vw;
+    max-width:340px;
+    height:270px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:22px;
+  }
+  .btn-si{
+    background:var(--wine);
+    color:var(--cream);
+    border:none;
+    padding:22px 48px;
+    font-size:26px;
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    border-radius:50px;
+    box-shadow:0 10px 24px rgba(122,46,59,.4);
+    cursor:pointer;
+    transition:transform .15s ease;
+    z-index:5;
+  }
+  .btn-si:active{ transform:scale(.94); }
+  .btn-no{
+    position:relative;
+    background:var(--paper);
+    color:var(--wine);
+    border:1.5px solid var(--wine);
+    width:100px;
+    height:52px;
+    font-size:18px;
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    border-radius:50px;
+    cursor:pointer;
+    box-shadow:0 6px 14px rgba(58,20,25,.18);
+    transition:transform .18s ease, top .18s ease, left .18s ease;
+  }
+  .final-msg{
+    display:none;
+    text-align:center;
+    animation:pop .5s ease;
+  }
+  .final-msg.show{ display:block; }
+  @keyframes pop{
+    0%{ transform:scale(.7); opacity:0;}
+    70%{ transform:scale(1.06); opacity:1;}
+    100%{ transform:scale(1);}
+  }
+  .final-msg .script{ font-size:36px; color:var(--wine-deep); }
+  .final-msg p{ color:#8a6b6f; font-size:14px; margin-top:6px; line-height:1.5;}
+  .hidden{ display:none !important; }
+</style>
+</head>
+<body>
+
+<div class="book" id="book">
+
+  <!-- ================= PÁGINA 1 — PORTADA ================= -->
+  <section class="page">
+    <svg class="doodle" style="top:14%; left:8%; width:34px;" viewBox="0 0 24 24" fill="var(--wine)"><path d="M12 21s-7.5-4.6-10-9.3C.4 8.6 2 5 5.6 5c2 0 3.4 1 4.4 2.5C11 6 12.4 5 14.4 5 18 5 19.6 8.6 22 11.7 19.5 16.4 12 21 12 21z"/></svg>
+    <svg class="doodle" style="bottom:22%; right:10%; width:22px;" viewBox="0 0 24 24" fill="var(--gold)"><path d="M12 21s-7.5-4.6-10-9.3C.4 8.6 2 5 5.6 5c2 0 3.4 1 4.4 2.5C11 6 12.4 5 14.4 5 18 5 19.6 8.6 22 11.7 19.5 16.4 12 21 12 21z"/></svg>
+
+    <div class="eyebrow">para</div>
+    <h1 class="cover-title">Mi diva icónica<br>favorita</h1>
+    <p class="cover-sub">Desliza hacia la derecha ... 👉</p>
+
+    <div class="polaroid" style="--tilt:-4deg;">
+      <div class="tape" style="top:-10px; left:20px; transform:rotate(-8deg);"></div>
+      <img src="foto1.png" alt="foto de nosotros">
+      <div class="cap">desliza →</div>
+    </div>
+  </section>
+
+  <!-- ================= PÁGINA 2 — FOTO ================= -->
+  <section class="page">
+    <div class="eyebrow" style="align-self:center;">eres (a veces)</div>
+    <h2 class="photo-title">Mi lugar<br>favorito</h2>
+    <div class="polaroid frame-wrap" style="--tilt:3deg;">
+      <div class="tape" style="top:-10px; right:24px; transform:rotate(6deg);"></div>
+      <img src="foto2.png" alt="foto contigo">
+    </div>
+  </section>
+
+  <!-- ================= PÁGINA 3 — NOTA ================= -->
+  <section class="page">
+    <div class="note">
+      <p>I would die for you
+Climb the highest mountain
+Baby, there's nothing I wouldn't do</p>
+      <p>Now I've found you
+There's no more emptiness inside
+When we're hungry
+Love will keep us alive</p>
+      <div class="sign">— eagles</div>
+      <div class="sign">(la canción que según tú<br>le había mandado a otra JAJA)</div>
+    </div>
+  </section>
+
+  <!-- ================= PÁGINA 4 — LA PREGUNTA ================= -->
+  <section class="page" id="askPage">
+    <svg class="doodle" style="top:10%; left:12%; width:20px;" viewBox="0 0 24 24" fill="var(--blush)"><path d="M12 21s-7.5-4.6-10-9.3C.4 8.6 2 5 5.6 5c2 0 3.4 1 4.4 2.5C11 6 12.4 5 14.4 5 18 5 19.6 8.6 22 11.7 19.5 16.4 12 21 12 21z"/></svg>
+    <svg class="doodle" style="bottom:14%; right:14%; width:28px;" viewBox="0 0 24 24" fill="var(--gold)"><path d="M12 21s-7.5-4.6-10-9.3C.4 8.6 2 5 5.6 5c2 0 3.4 1 4.4 2.5C11 6 12.4 5 14.4 5 18 5 19.6 8.6 22 11.7 19.5 16.4 12 21 12 21z"/></svg>
+
+    <div id="questionBlock">
+      <div class="ask-title script">última página...</div>
+      <div class="eyebrow">¡NO PRESIONES EL "NO"!</div>
+      <p class="ask-big">Te quiero poquito y a veces.<br>¿tú me quieres?</p>
+
+      <div class="btn-zone" id="btnZone">
+        <button class="btn-si" id="btnSi">SI</button>
+        <button class="btn-no" id="btnNo">no</button>
+      </div>
+    </div>
+
+    <div class="final-msg" id="finalMsg">
+      <div class="script">JAJAJAJJ yo lo sé</div>
+      <p>ya te extraño, luego te hago otro sitio para invitarte a salir.</p>
+      <p>un besitooooooooooooooooooooooo</p>
+    </div>
+  </section>
+
+</div>
+
+<div class="dots" id="dots"></div>
+
+<script>
+  const book = document.getElementById('book');
+  const pages = document.querySelectorAll('.page');
+  const dotsWrap = document.getElementById('dots');
+
+  pages.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    dotsWrap.appendChild(d);
+  });
+  const dots = document.querySelectorAll('.dot');
+
+  book.addEventListener('scroll', () => {
+    const i = Math.round(book.scrollLeft / window.innerWidth);
+    dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
+  });
+
+  // ===== boton NO que escapa =====
+  const btnNo = document.getElementById('btnNo');
+  const btnZone = document.getElementById('btnZone');
+  const btnSi = document.getElementById('btnSi');
+
+  function dodge(){
+    const zoneRect = btnZone.getBoundingClientRect();
+    const noW = btnNo.offsetWidth;
+    const noH = btnNo.offsetHeight;
+    const maxX = zoneRect.width - noW;
+    const maxY = zoneRect.height - noH;
+
+    const siRect = btnSi.getBoundingClientRect();
+    const margin = 24;
+    const forbidden = {
+      left: (siRect.left - zoneRect.left) - margin,
+      right: (siRect.right - zoneRect.left) + margin,
+      top: (siRect.top - zoneRect.top) - margin,
+      bottom: (siRect.bottom - zoneRect.top) + margin
+    };
+
+    let newX, newY, tries = 0;
+    do{
+      newX = Math.random() * Math.max(maxX, 0);
+      newY = Math.random() * Math.max(maxY, 0);
+      tries++;
+    } while(
+      tries < 30 &&
+      newX < forbidden.right && newX + noW > forbidden.left &&
+      newY < forbidden.bottom && newY + noH > forbidden.top
+    );
+
+    btnNo.style.position = 'absolute';
+    btnNo.style.left = newX + 'px';
+    btnNo.style.top = newY + 'px';
+  }
+
+  ['pointerenter','touchstart','click'].forEach(evt=>{
+    btnNo.addEventListener(evt, (e)=>{
+      e.preventDefault();
+      dodge();
+    }, {passive:false});
+  });
+
+  btnSi.addEventListener('click', () => {
+    document.getElementById('questionBlock').style.display = 'none';
+    document.getElementById('finalMsg').classList.add('show');
+  });
+</script>
+
+</body>
+</html>
